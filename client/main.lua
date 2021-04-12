@@ -7,8 +7,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-
-
 --- CODE
 
 local uiOpen = false
