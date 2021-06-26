@@ -43,11 +43,11 @@ Citizen.CreateThread(function()
         local pos = GetEntityCoords(ped)
         local inRange = false
         for k, v in pairs(Config.Registers) do
-            local dist = #(pos - vector3(Config.Registers[k].x, Config.Registers[k].y, Config.Registers[k].z))
+            local dist = #(pos - Config.Registers[k][1].xyz)
 
             if dist <= 1 and Config.Registers[k].robbed then
                 inRange = true
-                DrawText3Ds(Config.Registers[k].x, Config.Registers[k].y, Config.Registers[k].z, 'The Cash Register Is Empty')
+                DrawText3Ds(Config.Registers[k][1].xyz, 'The Cash Register Is Empty')
             end
         end
         if not inRange then 
@@ -64,12 +64,12 @@ Citizen.CreateThread(function()
         if QBCore ~= nil then
             local pos = GetEntityCoords(PlayerPedId())
             for safe,_ in pairs(Config.Safes) do
-                local dist = #(pos - vector3(Config.Safes[safe].x, Config.Safes[safe].y, Config.Safes[safe].z))
+                local dist = #(pos - Config.Safes[safe][1].xyz)
                 if dist < 3 then
                     inRange = true
                     if dist < 1.0 then
                         if not Config.Safes[safe].robbed then
-                            DrawText3Ds(Config.Safes[safe].x, Config.Safes[safe].y, Config.Safes[safe].z, '~g~E~w~ - Try Combination')
+                            DrawText3Ds(Config.Safes[safe][1].xyz, '~g~E~w~ - Try Combination')
                             if IsControlJustPressed(0, 38) then
                                 if CurrentCops >= Config.MinimumStoreRobberyPolice then
                                     currentSafe = safe
@@ -107,7 +107,7 @@ Citizen.CreateThread(function()
                                 end
                             end
                         else
-                            DrawText3Ds(Config.Safes[safe].x, Config.Safes[safe].y, Config.Safes[safe].z, 'Safe Opened')
+                            DrawText3Ds(Config.Safes[safe][1].xyz, 'Safe Opened')
                         end
                     end
                 end
@@ -148,7 +148,7 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
     for k, v in pairs(Config.Registers) do
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
-        local dist = #(pos - vector3(Config.Registers[k].x, Config.Registers[k].y, Config.Registers[k].z))
+        local dist = #(pos - Config.Registers[k][1].xyz)
         if dist <= 1 and not Config.Registers[k].robbed then
             if CurrentCops >= Config.MinimumStoreRobberyPolice then
                 -- print(usingAdvanced)
@@ -239,7 +239,7 @@ function setupSafes()
     end)
 end
 
-DrawText3Ds = function(x, y, z, text)
+DrawText3Ds = function(coords, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)
@@ -247,7 +247,7 @@ DrawText3Ds = function(x, y, z, text)
     SetTextEntry("STRING")
     SetTextCentre(true)
     AddTextComponentString(text)
-    SetDrawOrigin(x,y,z, 0)
+    SetDrawOrigin(coords, 0)
     DrawText(0.0, 0.0)
     local factor = (string.len(text)) / 370
     DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
