@@ -1,14 +1,3 @@
-QBCore = nil
-
-Citizen.CreateThread(function() 
-    while QBCore == nil do
-        TriggerEvent("QBCore:GetObject", function(obj) QBCore = obj end)    
-        Citizen.Wait(200)
-    end
-end)
-
---- CODE
-
 local uiOpen = false
 local currentRegister   = 0
 local currentSafe = 0
