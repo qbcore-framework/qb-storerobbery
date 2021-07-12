@@ -430,9 +430,12 @@ RegisterNUICallback('TryCombination', function(data, cb)
 end)
 
 RegisterNetEvent('qb-storerobbery:client:setRegisterStatus')
-AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(register, bool)
-    Config.Registers[register].robbed = bool
+AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(batch, bool)
+    for k, v in pairs(batch) do
+        Config.Registers[k].robbed = bool
+    end
 end)
+
 
 RegisterNetEvent('qb-storerobbery:client:setSafeStatus')
 AddEventHandler('qb-storerobbery:client:setSafeStatus', function(safe, bool)
