@@ -4,7 +4,7 @@ local cashB = 450				--<< how much maximum you can get from a robbery
 
 
 Citizen.CreateThread(function()
-    while true do 
+    while true do
         SafeCodes = {
             [1] = math.random(1000, 9999),
             [2] = {math.random(1, 149), math.random(150.0, 359.0), math.random(1, 149), math.random(150.0, 359.0), math.random(1, 149)},
@@ -61,9 +61,9 @@ end)
 
 RegisterServerEvent('qb-storerobbery:server:setRegisterStatus')
 AddEventHandler('qb-storerobbery:server:setRegisterStatus', function(register)
-    TriggerClientEvent('qb-storerobbery:client:setRegisterStatus', -1, register, true)
     Config.Registers[register].robbed   = true
     Config.Registers[register].time     = Config.resetTime
+    TriggerClientEvent('qb-storerobbery:client:setRegisterStatus', -1, register, Config.Registers[register])
 end)
 
 RegisterServerEvent('qb-storerobbery:server:setSafeStatus')
@@ -120,16 +120,25 @@ end)
 Citizen.CreateThread(function()
     while true do
         local toSend = {}
-        for k, v in pairs(Config.Registers) do
+        for k, v in ipairs(Config.Registers) do
+
             if Config.Registers[k].time > 0 and (Config.Registers[k].time - Config.tickInterval) >= 0 then
                 Config.Registers[k].time = Config.Registers[k].time - Config.tickInterval
             else
-                Config.Registers[k].time = 0
-                Config.Registers[k].robbed = false
-                table.insert(toSend, k)
+                if Config.Registers[k].robbed then
+                    Config.Registers[k].time = 0
+                    Config.Registers[k].robbed = false
+
+                    table.insert(toSend, Config.Registers[k])
+                end
             end
         end
-        TriggerClientEvent('qb-storerobbery:client:setRegisterStatus', -1, toSend, false)        
+
+        if #toSend > 0 then
+            --The false on the end of this is redundant
+            TriggerClientEvent('qb-storerobbery:client:setRegisterStatus', -1, toSend, false)
+        end
+
         Citizen.Wait(Config.tickInterval)
     end
 end)

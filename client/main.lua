@@ -22,7 +22,6 @@ Citizen.CreateThread(function()
         end
     end
 end)
-
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
     setupRegister()
@@ -33,13 +32,12 @@ Citizen.CreateThread(function()
         local inRange = false
         for k, v in pairs(Config.Registers) do
             local dist = #(pos - Config.Registers[k][1].xyz)
-
             if dist <= 1 and Config.Registers[k].robbed then
                 inRange = true
                 DrawText3Ds(Config.Registers[k][1].xyz, 'The Cash Register Is Empty')
             end
         end
-        if not inRange then 
+        if not inRange then
             Citizen.Wait(2000)
         end
         Citizen.Wait(3)
@@ -47,7 +45,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    while true do 
+    while true do
         Citizen.Wait(1)
         local inRange = false
         if QBCore ~= nil then
@@ -85,7 +83,7 @@ Citizen.CreateThread(function()
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
-                                        if street2 ~= nil then 
+                                        if street2 ~= nil then
                                             streetLabel = streetLabel .. " " .. street2
                                         end
                                         TriggerServerEvent("qb-storerobbery:server:callCops", "safe", currentSafe, streetLabel, pos)
@@ -152,42 +150,33 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
-                        if street2 ~= nil then 
+                        if street2 ~= nil then
                             streetLabel = streetLabel .. " " .. street2
                         end
-                        print('1')
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
                     end
                 else
-                    -- print("YES")
-                    
-                    -- QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasitem)
-                    --     print(hasitem)
-                    --     if result then
-                            lockpick(true)
-                            currentRegister = k
-                            if not IsWearingHandshoes() then
-                                TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-                            end
-                            if not copsCalled then
-                                print('alarm')
-                                local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
-                                local street1 = GetStreetNameFromHashKey(s1)
-                                local street2 = GetStreetNameFromHashKey(s2)
-                                local streetLabel = street1
-                                if street2 ~= nil then 
-                                    streetLabel = streetLabel .. " " .. street2
-                                end
-                                TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
-                                copsCalled = true
-                            end
-                    --     else
-                    --         QBCore.Functions.Notify("It Looks Like You Are Missing A ToolKit", "error")
-                    --     end
-                    -- end, "screwdriverset")
+
+                    lockpick(true)
+                    currentRegister = k
+                    if not IsWearingHandshoes() then
+                        TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+                    end
+                    if not copsCalled then
+                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+                        local street1 = GetStreetNameFromHashKey(s1)
+                        local street2 = GetStreetNameFromHashKey(s2)
+                        local streetLabel = street1
+                        if street2 ~= nil then
+                            streetLabel = streetLabel .. " " .. street2
+                        end
+                        TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
+                        copsCalled = true
+                    end
+
                 end
-                
+
             else
                 QBCore.Functions.Notify("Not Enough Police (2 Required)", "error")
             end
@@ -199,7 +188,7 @@ function IsWearingHandshoes()
     local armIndex = GetPedDrawableVariation(PlayerPedId(), 3)
     local model = GetEntityModel(PlayerPedId())
     local retval = true
-    
+
     if model == GetHashKey("mp_m_freemode_01") then
         if Config.MaleNoHandshoes[armIndex] ~= nil and Config.MaleNoHandshoes[armIndex] then
             retval = false
@@ -290,7 +279,7 @@ RegisterNUICallback('success', function()
         }, {}, {}, function() -- Done
             openingDoor = false
             ClearPedTasks(PlayerPedId())
-            TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, true)            
+            TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, true)
             currentRegister = 0
         end, function() -- Cancel
             openingDoor = false
@@ -430,12 +419,16 @@ RegisterNUICallback('TryCombination', function(data, cb)
 end)
 
 RegisterNetEvent('qb-storerobbery:client:setRegisterStatus')
-AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(batch, bool)
-    for k, v in pairs(batch) do
-        Config.Registers[k].robbed = bool
+AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(batch, val)
+    -- Has to be a better way maybe like adding a unique id to identify the register
+    if(type(batch) ~= "table") then
+        Config.Registers[batch] = val
+    else
+        for k, v in pairs(batch) do
+            Config.Registers[k] = batch[k]
+        end
     end
 end)
-
 
 RegisterNetEvent('qb-storerobbery:client:setSafeStatus')
 AddEventHandler('qb-storerobbery:client:setSafeStatus', function(safe, bool)
