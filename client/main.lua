@@ -90,7 +90,7 @@ Citizen.CreateThread(function()
                                         copsCalled = true
                                     end
                                 else
-                                    QBCore.Functions.Notify("Not Enough Police (2 Required)", "error")
+                                    QBCore.Functions.Notify("Not Enough Police (".. Config.MinimumStoreRobberyPolice .." Required)", "error")
                                 end
                             end
                         else
