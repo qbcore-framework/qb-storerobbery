@@ -34,13 +34,14 @@ RegisterServerEvent('qb-storerobbery:server:takeMoney')
 AddEventHandler('qb-storerobbery:server:takeMoney', function(register, isDone)
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
+	-- Add some stuff if you want, this here above the if statement will trigger every 2 seconds of the animation when robbing a cash register.
+    if isDone then
 	local bags = math.random(1,3)
 	local info = {
 		worth = math.random(cashA, cashB)
 	}
 	Player.Functions.AddItem('markedbills', bags, false, info)
 	TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
-    if isDone then
         if math.random(1, 100) <= 10 then
             local code = SafeCodes[Config.Registers[register].safeKey]
             local info = {}
