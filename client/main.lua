@@ -79,8 +79,8 @@ Citizen.CreateThread(function()
 
                                     if not copsCalled then
                                         local pos = GetEntityCoords(PlayerPedId())
-                                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
-                                        local street1 = GetStreetNameFromHashKey(s1)
+                                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+					local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
                                         if street2 ~= nil then
@@ -146,7 +146,7 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -164,7 +164,7 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
