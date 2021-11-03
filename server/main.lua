@@ -129,8 +129,7 @@ Citizen.CreateThread(function()
                 if Config.Registers[k].robbed then
                     Config.Registers[k].time = 0
                     Config.Registers[k].robbed = false
-
-                    table.insert(toSend, Config.Registers[k])
+                    toSend[#toSend+1] = Config.Registers[k]
                 end
             end
         end
