@@ -7,23 +7,24 @@ local PlayerJob = {}
 local onDuty = false
 local usingAdvanced = false
 
-Citizen.CreateThread(function()
+CreateThread(function()
     Wait(1000)
     if QBCore.Functions.GetPlayerData().job ~= nil and next(QBCore.Functions.GetPlayerData().job) then
         PlayerJob = QBCore.Functions.GetPlayerData().job
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(1000 * 60 * 5)
+        Wait(1000 * 60 * 5)
         if copsCalled then
             copsCalled = false
         end
     end
 end)
-Citizen.CreateThread(function()
-    Citizen.Wait(1000)
+
+CreateThread(function()
+    Wait(1000)
     setupRegister()
     setupSafes()
     while true do
@@ -38,15 +39,15 @@ Citizen.CreateThread(function()
             end
         end
         if not inRange then
-            Citizen.Wait(2000)
+            Wait(2000)
         end
-        Citizen.Wait(3)
+        Wait(3)
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(1)
+        Wait(1)
         local inRange = false
         if QBCore ~= nil then
             local pos = GetEntityCoords(PlayerPedId())
@@ -79,7 +80,7 @@ Citizen.CreateThread(function()
 
                                     if not copsCalled then
                                         local pos = GetEntityCoords(PlayerPedId())
-                                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+                                        local s1, s2 = InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, PointerValueInt(), PointerValueInt())
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
@@ -102,35 +103,30 @@ Citizen.CreateThread(function()
         end
 
         if not inRange then
-            Citizen.Wait(2000)
+            Wait(2000)
         end
     end
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     PlayerJob = QBCore.Functions.GetPlayerData().job
     onDuty = true
 end)
 
-RegisterNetEvent('QBCore:Client:SetDuty')
-AddEventHandler('QBCore:Client:SetDuty', function(duty)
+RegisterNetEvent('QBCore:Client:SetDuty', function(duty)
     onDuty = duty
 end)
 
-RegisterNetEvent('QBCore:Client:OnJobUpdate')
-AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerJob = JobInfo
     onDuty = true
 end)
 
-RegisterNetEvent('police:SetCopCount')
-AddEventHandler('police:SetCopCount', function(amount)
+RegisterNetEvent('police:SetCopCount', function(amount)
     CurrentCops = amount
 end)
 
-RegisterNetEvent('lockpicks:UseLockpick')
-AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
+RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     usingAdvanced = isAdvanced
     for k, v in pairs(Config.Registers) do
         local ped = PlayerPedId()
@@ -146,7 +142,7 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+                        local s1, s2 = InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, PointerValueInt(), PointerValueInt())
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -164,7 +160,7 @@ AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-                        local s1, s2 = Citizen.InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+                        local s1, s2 = InvokeNative(0x2EB41072B4C1E4C0, pos.x, pos.y, pos.z, PointerValueInt(), PointerValueInt())
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -245,7 +241,7 @@ end
 function loadAnimDict(dict)
     while (not HasAnimDictLoaded(dict)) do
         RequestAnimDict(dict)
-        Citizen.Wait(100)
+        Wait(100)
     end
 end
 
@@ -253,14 +249,15 @@ function takeAnim()
     local ped = PlayerPedId()
     while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do
         RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-        Citizen.Wait(100)
+        Wait(100)
     end
     TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "idle_d", 8.0, 8.0, -1, 50, 0, false, false, false)
-    Citizen.Wait(2500)
+    Wait(2500)
     TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "exit", 8.0, 8.0, -1, 50, 0, false, false, false)
 end
 
 local openingDoor = false
+
 RegisterNUICallback('success', function()
     if currentRegister ~= 0 then
         lockpick(false)
@@ -287,10 +284,10 @@ RegisterNUICallback('success', function()
             QBCore.Functions.Notify("Process canceled..", "error")
             currentRegister = 0
         end)
-        Citizen.CreateThread(function()
+        CreateThread(function()
             while openingDoor do
                 TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
-                Citizen.Wait(10000)
+                Wait(10000)
             end
         end)
     else
@@ -305,10 +302,10 @@ function LockpickDoorAnim(time)
     loadAnimDict("veh@break_in@0h@p_m_one@")
     TaskPlayAnim(PlayerPedId(), "veh@break_in@0h@p_m_one@", "low_force_entry_ds" ,3.0, 3.0, -1, 16, 0, false, false, false)
     openingDoor = true
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while openingDoor do
             TaskPlayAnim(PlayerPedId(), "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 3.0, 3.0, -1, 16, 0, 0, 0, 0)
-            Citizen.Wait(2000)
+            Wait(2000)
             time = time - 2
             TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, false)
             if time <= 0 then
@@ -323,8 +320,7 @@ RegisterNUICallback('callcops', function()
     TriggerEvent("police:SetCopAlert")
 end)
 
-RegisterNetEvent('SafeCracker:EndMinigame')
-AddEventHandler('SafeCracker:EndMinigame', function(won)
+RegisterNetEvent('SafeCracker:EndMinigame', function(won)
     if currentSafe ~= 0 then
         if won then
             if currentSafe ~= 0 then
@@ -418,8 +414,7 @@ RegisterNUICallback('TryCombination', function(data, cb)
     end, currentSafe)
 end)
 
-RegisterNetEvent('qb-storerobbery:client:setRegisterStatus')
-AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(batch, val)
+RegisterNetEvent('qb-storerobbery:client:setRegisterStatus', function(batch, val)
     -- Has to be a better way maybe like adding a unique id to identify the register
     if(type(batch) ~= "table") then
         Config.Registers[batch] = val
@@ -430,13 +425,11 @@ AddEventHandler('qb-storerobbery:client:setRegisterStatus', function(batch, val)
     end
 end)
 
-RegisterNetEvent('qb-storerobbery:client:setSafeStatus')
-AddEventHandler('qb-storerobbery:client:setSafeStatus', function(safe, bool)
+RegisterNetEvent('qb-storerobbery:client:setSafeStatus', function(safe, bool)
     Config.Safes[safe].robbed = bool
 end)
 
-RegisterNetEvent('qb-storerobbery:client:robberyCall')
-AddEventHandler('qb-storerobbery:client:robberyCall', function(type, key, streetLabel, coords)
+RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, streetLabel, coords)
     if PlayerJob.name == "police" and onDuty then
         local cameraId = 4
         if type == "safe" then
