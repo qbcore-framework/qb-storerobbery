@@ -80,7 +80,7 @@ CreateThread(function()
 
                                     if not copsCalled then
                                         local pos = GetEntityCoords(PlayerPedId())
-					local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+					local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
@@ -142,7 +142,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -160,7 +160,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt())
+			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
