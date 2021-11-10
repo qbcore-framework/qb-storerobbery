@@ -1,3 +1,4 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 local uiOpen = false
 local currentRegister   = 0
 local currentSafe = 0
