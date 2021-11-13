@@ -154,3 +154,7 @@ end)
 QBCore.Functions.CreateCallback('qb-storerobbery:server:getSafeStatus', function(source, cb)
     cb(Config.Safes)
 end)
+
+QBCore.Functions.CreateUseableItem('advancedlockpick', function(source, cb)
+    TriggerClientEvent('lockpicks:UseLockpick', source, 0)
+end)
