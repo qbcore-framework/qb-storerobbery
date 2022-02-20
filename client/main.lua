@@ -439,26 +439,7 @@ RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, stree
             cameraId = Config.Registers[key].camId
         end
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
-            timeOut = 5000,
-            alertTitle = "10-31 | Shop Robbery",
-            coords = {
-                x = coords.x,
-                y = coords.y,
-                z = coords.z,
-            },
-            details = {
-                [1] = {
-                    icon = '<i class="fas fa-video"></i>',
-                    detail = cameraId,
-                },
-                [2] = {
-                    icon = '<i class="fas fa-globe-europe"></i>',
-                    detail = streetLabel,
-                },
-            },
-            callSign = QBCore.Functions.GetPlayerData().metadata["callsign"],
-        })
+        TriggerServerEvent('police:server:policeAlert', 'Storerobbery in progress')
 
         local transG = 250
         local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
