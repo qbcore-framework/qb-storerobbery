@@ -81,7 +81,7 @@ CreateThread(function()
 
                                     if not copsCalled then
                                         local pos = GetEntityCoords(PlayerPedId())
-					local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
@@ -129,13 +129,12 @@ end)
 
 RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     usingAdvanced = isAdvanced
-    for k, v in pairs(Config.Registers) do
+    for k in pairs(Config.Registers) do
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
         local dist = #(pos - Config.Registers[k][1].xyz)
         if dist <= 1 and not Config.Registers[k].robbed then
             if CurrentCops >= Config.MinimumStoreRobberyPolice then
-                -- print(usingAdvanced)
                 if usingAdvanced then
                     lockpick(true)
                     currentRegister = k
@@ -143,7 +142,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -154,14 +153,13 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         copsCalled = true
                     end
                 else
-
                     lockpick(true)
                     currentRegister = k
                     if not IsWearingHandshoes() then
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
