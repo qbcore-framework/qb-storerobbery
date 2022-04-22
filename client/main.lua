@@ -325,8 +325,8 @@ RegisterNetEvent('SafeCracker:EndMinigame', function(won)
             if currentSafe ~= 0 then
                 if not Config.Safes[currentSafe].robbed then
                     SetNuiFocus(false, false)
-                    TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                     TriggerServerEvent("qb-storerobbery:server:setSafeStatus", currentSafe)
+                    TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                     currentSafe = 0
                     takeAnim()
                 end
@@ -391,8 +391,8 @@ RegisterNUICallback('TryCombination', function(data, cb)
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:isCombinationRight', function(combination)
         if tonumber(data.combination) ~= nil then
             if tonumber(data.combination) == combination then
-                TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                 TriggerServerEvent("qb-storerobbery:server:setSafeStatus", currentSafe)
+                TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                 SetNuiFocus(false, false)
                 SendNUIMessage({
                     action = "closeKeypad",
