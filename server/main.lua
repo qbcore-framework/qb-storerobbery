@@ -75,24 +75,33 @@ RegisterNetEvent('qb-storerobbery:server:setRegisterStatus', function(register)
 end)
 
 RegisterNetEvent('qb-storerobbery:server:setSafeStatus', function(safe)
-    TriggerClientEvent('qb-storerobbery:client:setSafeStatus', -1, safe, true)
     Config.Safes[safe].robbed = true
+    TriggerClientEvent('qb-storerobbery:client:setSafeStatus', -1, safe, true)
 
     SetTimeout(math.random(40, 80) * (60 * 1000), function()
-        TriggerClientEvent('qb-storerobbery:client:setSafeStatus', -1, safe, false)
         Config.Safes[safe].robbed = false
+        TriggerClientEvent('qb-storerobbery:client:setSafeStatus', -1, safe, false)
     end)
 end)
 
 RegisterNetEvent('qb-storerobbery:server:SafeReward', function(safe)
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    local playerPed = GetPlayerPed(src)
+    local playerCoords = GetEntityCoords(playerPed)
+    if #(playerCoords - Config.Safes[safe][1].xyz) > 3.0 or Config.Safes[safe].robbed then
+        return DropPlayer(src, "Attempted exploit abuse")
+    end
+
 	local bags = math.random(1,3)
 	local info = {
 		worth = math.random(cashA, cashB)
 	}
 	Player.Functions.AddItem('markedbills', bags, false, info)
 	TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
+
     local luck = math.random(1, 100)
     local odd = math.random(1, 100)
     if luck <= 10 then
