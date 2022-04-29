@@ -276,7 +276,6 @@ RegisterNUICallback('success', function()
             openingDoor = false
             ClearPedTasks(PlayerPedId())
             TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, true)
-            currentRegister = 0
         end, function() -- Cancel
             openingDoor = false
             ClearPedTasks(PlayerPedId())
@@ -312,6 +311,7 @@ function LockpickDoorAnim(time)
                 StopAnimTask(PlayerPedId(), "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 1.0)
             end
         end
+        currentRegister = 0
     end)
 end
 
