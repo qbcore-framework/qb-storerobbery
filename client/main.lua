@@ -80,7 +80,7 @@ CreateThread(function()
 
                                     if not copsCalled then
                                         pos = GetEntityCoords(PlayerPedId())
-					                    local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
