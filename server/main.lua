@@ -74,7 +74,7 @@ RegisterNetEvent('qb-storerobbery:server:setSafeStatus', function(safe)
     end)
 end)
 
-RegisterNetEvent('qb-storerobbery:server:SafeReward', function(_)
+RegisterNetEvent('qb-storerobbery:server:SafeReward', function()
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
 	local bags = math.random(1,3)
@@ -116,7 +116,7 @@ end)
 CreateThread(function()
     while true do
         local toSend = {}
-        for k, _ in ipairs(Config.Registers) do
+        for k in ipairs(Config.Registers) do
 
             if Config.Registers[k].time > 0 and (Config.Registers[k].time - Config.tickInterval) >= 0 then
                 Config.Registers[k].time = Config.Registers[k].time - Config.tickInterval

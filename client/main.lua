@@ -31,7 +31,7 @@ CreateThread(function()
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
         local inRange = false
-        for k, _ in pairs(Config.Registers) do
+        for k in pairs(Config.Registers) do
             local dist = #(pos - Config.Registers[k][1].xyz)
             if dist <= 1 and Config.Registers[k].robbed then
                 inRange = true
@@ -128,7 +128,7 @@ end)
 
 RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     usingAdvanced = isAdvanced
-    for k, _ in pairs(Config.Registers) do
+    for k in pairs(Config.Registers) do
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
         local dist = #(pos - Config.Registers[k][1].xyz)
@@ -199,7 +199,7 @@ end
 
 function setupRegister()
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:getRegisterStatus', function(Registers)
-        for k, _ in pairs(Registers) do
+        for k in pairs(Registers) do
             Config.Registers[k].robbed = Registers[k].robbed
         end
     end)
@@ -207,7 +207,7 @@ end
 
 function setupSafes()
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:getSafeStatus', function(Safes)
-        for k, _ in pairs(Safes) do
+        for k in pairs(Safes) do
             Config.Safes[k].robbed = Safes[k].robbed
         end
     end)
@@ -420,7 +420,7 @@ RegisterNetEvent('qb-storerobbery:client:setRegisterStatus', function(batch, val
     if(type(batch) ~= "table") then
         Config.Registers[batch] = val
     else
-        for k, _ in pairs(batch) do
+        for k in pairs(batch) do
             Config.Registers[k] = batch[k]
         end
     end
