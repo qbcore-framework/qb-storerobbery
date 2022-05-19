@@ -257,7 +257,7 @@ end
 
 local openingDoor = false
 
-RegisterNUICallback('success', function()
+RegisterNUICallback('success', function(_, cb)
     if currentRegister ~= 0 then
         lockpick(false)
         TriggerServerEvent('qb-storerobbery:server:setRegisterStatus', currentRegister)
@@ -294,6 +294,7 @@ RegisterNUICallback('success', function()
             action = "kekw",
         })
     end
+    cb('ok')
 end)
 
 function LockpickDoorAnim(time)
@@ -315,8 +316,9 @@ function LockpickDoorAnim(time)
     end)
 end
 
-RegisterNUICallback('callcops', function()
+RegisterNUICallback('callcops', function(_, cb)
     TriggerEvent("police:SetCopAlert")
+    cb('ok')
 end)
 
 RegisterNetEvent('SafeCracker:EndMinigame', function(won)
@@ -340,7 +342,7 @@ RegisterNetEvent('SafeCracker:EndMinigame', function(won)
     copsCalled = false
 end)
 
-RegisterNUICallback('PadLockSuccess', function()
+RegisterNUICallback('PadLockSuccess', function(_, cb)
     if currentSafe ~= 0 then
         if not Config.Safes[currentSafe].robbed then
             SendNUIMessage({
@@ -352,11 +354,13 @@ RegisterNUICallback('PadLockSuccess', function()
             action = "kekw",
         })
     end
+    cb('ok')
 end)
 
-RegisterNUICallback('PadLockClose', function()
+RegisterNUICallback('PadLockClose', function(_, cb)
     SetNuiFocus(false, false)
     copsCalled = false
+    cb('ok')
 end)
 
 RegisterNUICallback("CombinationFail", function(_, cb)
@@ -364,7 +368,7 @@ RegisterNUICallback("CombinationFail", function(_, cb)
     cb("ok")
 end)
 
-RegisterNUICallback('fail', function()
+RegisterNUICallback('fail', function(_ ,cb)
     if usingAdvanced then
         if math.random(1, 100) < 20 then
             TriggerServerEvent("QBCore:Server:RemoveItem", "advancedlockpick", 1)
@@ -382,10 +386,12 @@ RegisterNUICallback('fail', function()
         QBCore.Functions.Notify("You Broke The Lock Pick")
     end
     lockpick(false)
+    cb('ok')
 end)
 
-RegisterNUICallback('exit', function()
+RegisterNUICallback('exit', function(_, cb)
     lockpick(false)
+    cb('ok')
 end)
 
 RegisterNUICallback('TryCombination', function(data, cb)
