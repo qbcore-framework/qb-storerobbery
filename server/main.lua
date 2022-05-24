@@ -52,7 +52,6 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
         if math.random(1, 100) <= 10 then
             local code = SafeCodes[Config.Registers[register].safeKey]
-            local info = {}
             if Config.Safes[Config.Registers[register].safeKey].type == "keypad" then
                 info = {
                     label = "Safe Code: "..tostring(code)
@@ -84,7 +83,7 @@ RegisterNetEvent('qb-storerobbery:server:setSafeStatus', function(safe)
     end)
 end)
 
-RegisterNetEvent('qb-storerobbery:server:SafeReward', function(safe)
+RegisterNetEvent('qb-storerobbery:server:SafeReward', function()
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -117,7 +116,7 @@ end)
 
 
 RegisterNetEvent('qb-storerobbery:server:callCops', function(type, safe, streetLabel, coords)
-    local cameraId = 4
+    local cameraId
     if type == "safe" then
         cameraId = Config.Safes[safe].camId
     else
@@ -135,7 +134,7 @@ end)
 CreateThread(function()
     while true do
         local toSend = {}
-        for k, v in ipairs(Config.Registers) do
+        for k in ipairs(Config.Registers) do
 
             if Config.Registers[k].time > 0 and (Config.Registers[k].time - Config.tickInterval) >= 0 then
                 Config.Registers[k].time = Config.Registers[k].time - Config.tickInterval
@@ -157,18 +156,18 @@ CreateThread(function()
     end
 end)
 
-QBCore.Functions.CreateCallback('qb-storerobbery:server:isCombinationRight', function(source, cb, safe)
+QBCore.Functions.CreateCallback('qb-storerobbery:server:isCombinationRight', function(_, cb, safe)
     cb(SafeCodes[safe])
 end)
 
-QBCore.Functions.CreateCallback('qb-storerobbery:server:getPadlockCombination', function(source, cb, safe)
+QBCore.Functions.CreateCallback('qb-storerobbery:server:getPadlockCombination', function(_, cb, safe)
     cb(SafeCodes[safe])
 end)
 
-QBCore.Functions.CreateCallback('qb-storerobbery:server:getRegisterStatus', function(source, cb)
+QBCore.Functions.CreateCallback('qb-storerobbery:server:getRegisterStatus', function(_, cb)
     cb(Config.Registers)
 end)
 
-QBCore.Functions.CreateCallback('qb-storerobbery:server:getSafeStatus', function(source, cb)
+QBCore.Functions.CreateCallback('qb-storerobbery:server:getSafeStatus', function(_, cb)
     cb(Config.Safes)
 end)
