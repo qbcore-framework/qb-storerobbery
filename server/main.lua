@@ -83,7 +83,7 @@ RegisterNetEvent('qb-storerobbery:server:setSafeStatus', function(safe)
     end)
 end)
 
-RegisterNetEvent('qb-storerobbery:server:SafeReward', function()
+RegisterNetEvent('qb-storerobbery:server:SafeReward', function(safe)
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
