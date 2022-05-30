@@ -174,7 +174,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                 end
 
             else
-                QBCore.Functions.Notify("Not Enough Police (2 Required)", "error")
+                QBCore.Functions.Notify("Not Enough Police "..Config.MinimumStoreRobberyPolice.." Required", "error")
             end
         end
     end

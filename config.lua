@@ -3,7 +3,7 @@ Config = {}
 Config.minEarn = 100
 Config.maxEarn = 450
 Config.RegisterEarnings = math.random(Config.minEarn, Config.maxEarn)
-Config.MinimumStoreRobberyPolice = 2
+Config.MinimumStoreRobberyPolice = GetConvarInt("storerob_minimumpolice") or 0
 Config.resetTime = (60 * 1000) * 30
 Config.tickInterval = 1000
 
