@@ -134,7 +134,6 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
         local dist = #(pos - Config.Registers[k][1].xyz)
         if dist <= 1 and not Config.Registers[k].robbed then
             if CurrentCops >= Config.MinimumStoreRobberyPolice then
-                -- print(usingAdvanced)
                 if usingAdvanced then
                     lockpick(true)
                     currentRegister = k
@@ -142,7 +141,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -153,14 +152,13 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         copsCalled = true
                     end
                 else
-
                     lockpick(true)
                     currentRegister = k
                     if not IsWearingHandshoes() then
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -276,7 +274,6 @@ RegisterNUICallback('success', function(_, cb)
             openingDoor = false
             ClearPedTasks(PlayerPedId())
             TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, true)
-            currentRegister = 0
         end, function() -- Cancel
             openingDoor = false
             ClearPedTasks(PlayerPedId())
@@ -313,6 +310,7 @@ function LockpickDoorAnim(time)
                 StopAnimTask(PlayerPedId(), "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 1.0)
             end
         end
+        currentRegister = 0
     end)
 end
 
@@ -327,8 +325,8 @@ RegisterNetEvent('SafeCracker:EndMinigame', function(won)
             if currentSafe ~= 0 then
                 if not Config.Safes[currentSafe].robbed then
                     SetNuiFocus(false, false)
-                    TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                     TriggerServerEvent("qb-storerobbery:server:setSafeStatus", currentSafe)
+                    TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                     currentSafe = 0
                     takeAnim()
                 end
@@ -398,8 +396,8 @@ RegisterNUICallback('TryCombination', function(data, cb)
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:isCombinationRight', function(combination)
         if tonumber(data.combination) ~= nil then
             if tonumber(data.combination) == combination then
-                TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                 TriggerServerEvent("qb-storerobbery:server:setSafeStatus", currentSafe)
+                TriggerServerEvent("qb-storerobbery:server:SafeReward", currentSafe)
                 SetNuiFocus(false, false)
                 SendNUIMessage({
                     action = "closeKeypad",
