@@ -114,7 +114,6 @@ RegisterNetEvent('qb-storerobbery:server:SafeReward', function(safe)
     end
 end)
 
-
 RegisterNetEvent('qb-storerobbery:server:callCops', function(type, safe, streetLabel, coords)
     local cameraId
     if type == "safe" then
@@ -129,6 +128,22 @@ RegisterNetEvent('qb-storerobbery:server:callCops', function(type, safe, streetL
     }
     TriggerClientEvent("qb-storerobbery:client:robberyCall", -1, type, safe, streetLabel, coords)
     TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
+end)
+
+RegisterNetEvent('qb-storerobbery:server:removeAdvancedLockpick', function()
+    local Player = QBCore.Functions.GetPlayer(source)
+
+    if not Player then return end
+
+    Player.Functions.RemoveItem('advancedlockpick', 1)
+end)
+
+RegisterNetEvent('qb-storerobbery:server:removeLockpick', function()
+    local Player = QBCore.Functions.GetPlayer(source)
+
+    if not Player then return end
+
+    Player.Functions.RemoveItem('lockpick', 1)
 end)
 
 CreateThread(function()
