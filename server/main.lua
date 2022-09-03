@@ -54,11 +54,11 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
             local code = SafeCodes[Config.Registers[register].safeKey]
             if Config.Safes[Config.Registers[register].safeKey].type == "keypad" then
                 info = {
-                    label = "Safe Code: "..tostring(code)
+                    label = Lang:t("text.safe_code")..tostring(code)
                 }
             else
                 info = {
-                    label = "Safe Code: "..tostring(math.floor((code[1] % 360) / 3.60)).."-"..tostring(math.floor((code[2] % 360) / 3.60)).."-"..tostring(math.floor((code[3] % 360) / 3.60)).."-"..tostring(math.floor((code[4] % 360) / 3.60)).."-"..tostring(math.floor((code[5] % 360) / 3.60))
+                    label = Lang:t("text.safe_code")..tostring(math.floor((code[1] % 360) / 3.60)).."-"..tostring(math.floor((code[2] % 360) / 3.60)).."-"..tostring(math.floor((code[3] % 360) / 3.60)).."-"..tostring(math.floor((code[4] % 360) / 3.60)).."-"..tostring(math.floor((code[5] % 360) / 3.60))
                 }
             end
             Player.Functions.AddItem("stickynote", 1, false, info)
@@ -124,7 +124,7 @@ RegisterNetEvent('qb-storerobbery:server:callCops', function(type, safe, streetL
     local alertData = {
         title = "10-33 | Shop Robbery",
         coords = {x = coords.x, y = coords.y, z = coords.z},
-        description = "Someone Is Trying To Rob A Store At "..streetLabel.." (CAMERA ID: "..cameraId..")"
+        description = Lang:t("email.someone_is_trying_to_rob_a_store",{street = streetLabel, cameraId1 = cameraId})
     }
     TriggerClientEvent("qb-storerobbery:client:robberyCall", -1, type, safe, streetLabel, coords)
     TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
