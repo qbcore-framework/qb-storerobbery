@@ -1,6 +1,6 @@
 # qb-storerobbery
 Store Robberies For QB-Core
-
+Reworked to use ps-ui circle lockpick minigame/ps-dispatch alerts by #Randolio#6863
 # License
 
     QBCore Framework
