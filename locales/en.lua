@@ -5,13 +5,13 @@ local Translations = {
         demolish_vehicle = "You Are Not Allowed To Demolish Vehicles Now",
         process_canceled = "Process canceled..",
         you_broke_the_lock_pick = "You Broke The Lock Pick",
-        safe_code = "Safe Code: "
     },
     text = {
         the_cash_register_is_empty = "The Cash Register Is Empty",
         try_combination = "~g~E~w~ - Try Combination",
         safe_opened = "Safe Opened",
-        emptying_the_register= "Emptying The Register.."
+        emptying_the_register= "Emptying The Register..",
+        safe_code = "Safe Code: "
     },
     email = {
         shop_robbery = "10-31 | Shop Robbery",
