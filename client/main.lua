@@ -435,7 +435,7 @@ RegisterNetEvent('qb-storerobbery:client:setSafeStatus', function(safe, bool)
 end)
 
 RegisterNetEvent('qb-storerobbery:client:robberyCall', function(_, _, _, coords)
-    if PlayerJob.name == "police" and onDuty then
+    if (PlayerJob.name == "police" or PlayerJob.type == "leo") and onDuty then
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
         TriggerServerEvent('police:server:policeAlert', Lang:t("email.storerobbery_progress"))
 
