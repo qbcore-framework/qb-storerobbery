@@ -184,11 +184,11 @@ function IsWearingHandshoes()
     local retval = true
 
     if model == `mp_m_freemode_01` then
-        if Config.MaleNoHandshoes[armIndex] ~= nil and Config.MaleNoHandshoes[armIndex] then
+        if Config.MaleNoGloves[armIndex] ~= nil and Config.MaleNoGloves[armIndex] then
             retval = false
         end
     else
-        if Config.FemaleNoHandshoes[armIndex] ~= nil and Config.FemaleNoHandshoes[armIndex] then
+        if Config.FemaleNoGloves[armIndex] ~= nil and Config.FemaleNoGloves[armIndex] then
             retval = false
         end
     end
