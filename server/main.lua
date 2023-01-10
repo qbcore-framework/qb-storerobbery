@@ -37,7 +37,7 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
 
     local playerPed = GetPlayerPed(src)
     local playerCoords = GetEntityCoords(playerPed)
-    if #(playerCoords - Config.Registers[register][1].xyz) > 3.0 or (not Config.Registers[register].robbed and not isDone) or (Config.Registers[register].time <= 0 and not isDone) then
+    if #(playerCoords - Config.Registers[register][1].xyz) > 3.0 or not Config.Registers[register].robbed and not isDone or Config.Registers[register].time <= 0 and not isDone then
         return DropPlayer(src, "Attempted exploit abuse")
     end
 
