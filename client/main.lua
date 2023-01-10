@@ -87,6 +87,7 @@ CreateThread(function()
                                         if street2 ~= nil then
                                             streetLabel = streetLabel .. " " .. street2
                                         end
+                                        TriggerServerEvent('police:server:policeAlert', Lang:t("email.storerobbery_progress"))
                                         TriggerServerEvent("qb-storerobbery:server:callCops", "safe", currentSafe, streetLabel, pos)
                                         copsCalled = true
                                     end
@@ -148,6 +149,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         if street2 ~= nil then
                             streetLabel = streetLabel .. " " .. street2
                         end
+                        TriggerServerEvent('police:server:policeAlert', Lang:t("email.storerobbery_progress"))
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
                     end
@@ -165,6 +167,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         if street2 ~= nil then
                             streetLabel = streetLabel .. " " .. street2
                         end
+                        TriggerServerEvent('police:server:policeAlert', Lang:t("email.storerobbery_progress"))
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
                     end
@@ -437,7 +440,6 @@ end)
 RegisterNetEvent('qb-storerobbery:client:robberyCall', function(_, _, _, coords)
     if (PlayerJob.name == "police" or PlayerJob.type == "leo") and onDuty then
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        TriggerServerEvent('police:server:policeAlert', Lang:t("email.storerobbery_progress"))
 
         local transG = 250
         local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
