@@ -61,7 +61,7 @@ CreateThread(function()
                             if IsControlJustPressed(0, 38) then
                                 if CurrentCops >= Config.MinimumStoreRobberyPolice then
                                     currentSafe = safe
-                                    if math.random(1, 100) <= 65 and not IsWearingHandshoes() then
+                                    if math.random(1, 100) <= 65 and not IsWearingGloves() then
                                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                                     end
                                     if math.random(100) <= 50 then
@@ -137,7 +137,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                 if usingAdvanced then
                     lockpick(true)
                     currentRegister = k
-                    if not IsWearingHandshoes() then
+                    if not IsWearingGloves() then
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
@@ -154,7 +154,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                 else
                     lockpick(true)
                     currentRegister = k
-                    if not IsWearingHandshoes() then
+                    if not IsWearingGloves() then
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
@@ -178,17 +178,17 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     end
 end)
 
-function IsWearingHandshoes()
+function IsWearingGloves()
     local armIndex = GetPedDrawableVariation(PlayerPedId(), 3)
     local model = GetEntityModel(PlayerPedId())
     local retval = true
 
     if model == `mp_m_freemode_01` then
-        if Config.MaleNoHandshoes[armIndex] ~= nil and Config.MaleNoHandshoes[armIndex] then
+        if Config.MaleNoGloves[armIndex] ~= nil and Config.MaleNoGloves[armIndex] then
             retval = false
         end
     else
-        if Config.FemaleNoHandshoes[armIndex] ~= nil and Config.FemaleNoHandshoes[armIndex] then
+        if Config.FemaleNoGloves[armIndex] ~= nil and Config.FemaleNoGloves[armIndex] then
             retval = false
         end
     end
@@ -378,7 +378,7 @@ RegisterNUICallback('fail', function(_ ,cb)
             TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["lockpick"], "remove")
         end
     end
-    if (IsWearingHandshoes() and math.random(1, 100) <= 25) then
+    if (IsWearingGloves() and math.random(1, 100) <= 25) then
         local pos = GetEntityCoords(PlayerPedId())
         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
         QBCore.Functions.Notify(Lang:t("error.you_broke_the_lock_pick"))
