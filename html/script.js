@@ -1,6 +1,6 @@
 var minRot = -90,
     maxRot = 90,
-    solveDeg = (Math.random() * 180) - 90,
+    solveDeg = Math.random() * 180 - 90,
     solvePadding = 4,
     maxDistFromSolve = 45,
     pinRot = 0,
@@ -16,99 +16,84 @@ var minRot = -90,
     userPushingCyl = false,
     gameOver = false,
     gamePaused = false,
-    pin, cyl, driver, cylRotationInterval, pinLastDamaged;
+    pin,
+    cyl,
+    driver,
+    cylRotationInterval,
+    pinLastDamaged;
 
-
-
-var Keypad = {}
-var Padlock = {}
-var CurrentType = ""
+var Keypad = {};
+var Padlock = {};
+var CurrentType = "";
 
 var combo = [];
 
-Padlock.Open = function(data) {
-    CurrentType = "padlock"
+Padlock.Open = function (data) {
+    CurrentType = "padlock";
     $(".combonum").removeClass("found");
     combo = [];
     $("#padlock").css("display", "block");
-    $.each(data.combination, function(i, combi){
+    $.each(data.combination, function (i, combi) {
         combo.push(combi);
     });
-}
+};
 
-Padlock.Close = function() {
+Padlock.Close = function () {
     $("#padlock").css("display", "none");
-    $.post('https://qb-storerobbery/PadLockClose');
-}
+    $.post("https://qb-storerobbery/PadLockClose");
+};
 
-Keypad.Open = function(data) {
-    CurrentType = "keypad"
+Keypad.Open = function (data) {
+    CurrentType = "keypad";
     $("#keypad").css("display", "block");
-    $( "#keypad" ).html(
-        "<form action='' method='' name='PINform' id='PINform' autocomplete='off' draggable='true'>" +
-            "<input id='PINbox' type='password' value='' name='PINbox' disabled />" +
-            "<br/>" +
-            "<input type='button' class='PINbutton' name='1' value='1' id='1' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='2' value='2' id='2' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='3' value='3' id='3' onClick=addKeyPadNumber(this); />" +
-            "<br>" +
-            "<input type='button' class='PINbutton' name='4' value='4' id='4' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='5' value='5' id='5' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='6' value='6' id='6' onClick=addKeyPadNumber(this); />" +
-            "<br>" +
-            "<input type='button' class='PINbutton' name='7' value='7' id='7' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='8' value='8' id='8' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton' name='9' value='9' id='9' onClick=addKeyPadNumber(this); />" +
-            "<br>" +
-            "<input type='button' class='PINbutton clear' name='-' value='clear' id='-' onClick=clearForm(this); />" +
-            "<input type='button' class='PINbutton' name='0' value='0' id='0' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton enter' name='+' value='enter' id='+' onClick=submitForm(PINbox); />" +
-        "</form>"
-    );
-}
+    $("#keypad").html("<form action='' method='' name='PINform' id='PINform' autocomplete='off' draggable='true'>" + "<input id='PINbox' type='password' value='' name='PINbox' disabled />" + "<br/>" + "<input type='button' class='PINbutton' name='1' value='1' id='1' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='2' value='2' id='2' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='3' value='3' id='3' onClick=addKeyPadNumber(this); />" + "<br>" + "<input type='button' class='PINbutton' name='4' value='4' id='4' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='5' value='5' id='5' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='6' value='6' id='6' onClick=addKeyPadNumber(this); />" + "<br>" + "<input type='button' class='PINbutton' name='7' value='7' id='7' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='8' value='8' id='8' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton' name='9' value='9' id='9' onClick=addKeyPadNumber(this); />" + "<br>" + "<input type='button' class='PINbutton clear' name='-' value='clear' id='-' onClick=clearForm(this); />" + "<input type='button' class='PINbutton' name='0' value='0' id='0' onClick=addKeyPadNumber(this); />" + "<input type='button' class='PINbutton enter' name='+' value='enter' id='+' onClick=submitForm(PINbox); />" + "</form>");
+};
 
-Keypad.Close = function(data) {
+Keypad.Close = function (data) {
     $("#keypad").css("display", "none");
-    $.post('https://qb-storerobbery/PadLockClose');
+    $.post("https://qb-storerobbery/PadLockClose");
     if (data.error != null) {
-        $.post('https://qb-storerobbery/CombinationFail');
+        $.post("https://qb-storerobbery/CombinationFail");
     }
-}
+};
 
-function addKeyPadNumber(e){
-	//document.getElementById('PINbox').value = document.getElementById('PINbox').value+element.value;
-    var v = $( "#PINbox" ).val();
+function addKeyPadNumber(e) {
+    //document.getElementById('PINbox').value = document.getElementById('PINbox').value+element.value;
+    var v = $("#PINbox").val();
     if (v.length < 4) {
-        $( "#PINbox" ).val( v + e.value );
+        $("#PINbox").val(v + e.value);
     }
 }
-function clearForm(e){
-	//document.getElementById('PINbox').value = "";
-	$( "#PINbox" ).val( "" );
+function clearForm(e) {
+    //document.getElementById('PINbox').value = "";
+    $("#PINbox").val("");
 }
 
 var CanConfirm = true;
 
 function submitForm(e) {
     $("#keypad").css("display", "none");
-    $.post("https://qb-storerobbery/TryCombination", JSON.stringify({
-        combination: e.value,
-    }));
-};
+    $.post(
+        "https://qb-storerobbery/TryCombination",
+        JSON.stringify({
+            combination: e.value,
+        })
+    );
+}
 
 Draggable.create(".dial", {
-    type:"rotation",
-    throwProps:true
+    type: "rotation",
+    throwProps: true,
 });
 
-findCombo = function(comboArr){
+findCombo = function (comboArr) {
     let dial = $(".dial"),
         dialTrans = dial.css("transform"),
         ticks = 40,
         tickAngle = 360 / ticks,
         numOffset = 0.5, // how far red arrow can be from number
         // break down matrix value of dial transform and get angle
-        matrixVal = dialTrans.split('(')[1].split(')')[0].split(','),
+        matrixVal = dialTrans.split("(")[1].split(")")[0].split(","),
         cos1 = matrixVal[0],
         sin = matrixVal[1],
         negSin = matrixVal[2],
@@ -121,52 +106,50 @@ findCombo = function(comboArr){
     // check numbers found, stop loop if at first number not found
     for (let i = 0; i < comboArr.length; ++i) {
         if (!$(".num" + (i + 1)).hasClass("found")) {
-        if (angle > (comboArr[i] - numOffset) * tickAngle &&
-            angle < (comboArr[i] + numOffset) * tickAngle) {
-            // make numbers green when found
-            $(".num" + (i + 1)).addClass("found");
-            // on unlock
-            $.post('https://qb-storerobbery/callcops');
-            if (i == comboArr.length - 1) {
-                // unlock :)
-                $.post('https://qb-storerobbery/PadLockSuccess');
-                Padlock.Close();
+            if (angle > (comboArr[i] - numOffset) * tickAngle && angle < (comboArr[i] + numOffset) * tickAngle) {
+                // make numbers green when found
+                $(".num" + (i + 1)).addClass("found");
+                // on unlock
+                $.post("https://qb-storerobbery/callcops");
+                if (i == comboArr.length - 1) {
+                    // unlock :)
+                    $.post("https://qb-storerobbery/PadLockSuccess");
+                    Padlock.Close();
+                }
             }
-        }
-        break;
+            break;
         }
     }
 };
 
-$(".dial").on("click",function(){
+$(".dial").on("click", function () {
     findCombo(combo);
 });
 // dial interaction (touch)
-$(".dial").on("touchend",function(){
+$(".dial").on("touchend", function () {
     findCombo(combo);
 });
 
 $(function () {
-
     //pop vars
-    pin = $('#pin');
-    cyl = $('#cylinder');
-    driver = $('#driver');
+    pin = $("#pin");
+    cyl = $("#cylinder");
+    driver = $("#driver");
 
-    $('#wrap').hide();
+    $("#wrap").hide();
 
-    window.addEventListener('message', function(event){
+    window.addEventListener("message", function (event) {
         var eventData = event.data;
 
         if (eventData.action == "ui") {
             if (eventData.toggle) {
-                $('#wrap').fadeIn(250);
-                gameOver = false
-                gamePaused = false
+                $("#wrap").fadeIn(250);
+                gameOver = false;
+                gamePaused = false;
             } else {
-                $('#wrap').fadeOut(50);
-                gameOver = false
-                gamePaused = false
+                $("#wrap").fadeOut(50);
+                gameOver = false;
+                gamePaused = false;
             }
         }
 
@@ -190,51 +173,50 @@ $(function () {
             $("body").css("background-image", "url('https://i.kym-cdn.com/entries/icons/original/000/031/051/cover4.jpg')");
             $("body").css("background-size", "cover");
         }
-    })
+    });
 
-    $('body').on('mousemove', function (e) {
+    $("body").on("mousemove", function (e) {
         if (lastMousePos && !gameOver && !gamePaused) {
             var pinRotChange = (e.clientX - lastMousePos) / mouseSmoothing;
             pinRot += pinRotChange;
             pinRot = Util.clamp(pinRot, maxRot, minRot);
             pin.css({
-                transform: "rotateZ(" + pinRot + "deg)"
-            })
+                transform: "rotateZ(" + pinRot + "deg)",
+            });
         }
         lastMousePos = e.clientX;
     });
-    $('body').on('mouseleave', function (e) {
+    $("body").on("mouseleave", function (e) {
         lastMousePos = 0;
     });
 
-    $('body').on('keydown', function (e) {
+    $("body").on("keydown", function (e) {
         if ((e.keyCode == 87 || e.keyCode == 65 || e.keyCode == 83 || e.keyCode == 68 || e.keyCode == 37 || e.keyCode == 39) && !userPushingCyl && !gameOver && !gamePaused) {
             pushCyl();
         }
     });
 
-    $('body').on('keyup', function (e) {
+    $("body").on("keyup", function (e) {
         if ((e.keyCode == 87 || e.keyCode == 65 || e.keyCode == 83 || e.keyCode == 68 || e.keyCode == 37 || e.keyCode == 39) && !gameOver) {
             unpushCyl();
         }
     });
 
     //TOUCH HANDLERS
-    $('body').on('touchstart', function (e) {
+    $("body").on("touchstart", function (e) {
         if (!e.touchList) {
+        } else if (e.touchList) {
         }
-        else if (e.touchList) {
-        }
-    })
-    
+    });
+
     document.onkeyup = function (data) {
-        if (data.which == 27 ) {
+        if (data.which == 27) {
             if (CurrentType == "keypad") {
                 Keypad.Close();
-            } else if(CurrentType == "padlock") {
+            } else if (CurrentType == "padlock") {
                 Padlock.Close();
             } else {
-                $.post('https://qb-storerobbery/exit');
+                $.post("https://qb-storerobbery/exit");
             }
         }
     };
@@ -262,18 +244,17 @@ function pushCyl() {
             // do happy solvey stuff
             clearInterval(cylRotationInterval);
             unlock();
-        }
-        else if (cylRot >= cylRotationAllowance) {
+        } else if (cylRot >= cylRotationAllowance) {
             cylRot = cylRotationAllowance;
             // do sad pin-hurty stuff
             damagePin();
         }
 
         cyl.css({
-            transform: "rotateZ(" + cylRot + "deg)"
+            transform: "rotateZ(" + cylRot + "deg)",
         });
         driver.css({
-            transform: "rotateZ(" + cylRot + "deg)"
+            transform: "rotateZ(" + cylRot + "deg)",
         });
     }, keyRepeatRate);
 }
@@ -286,11 +267,11 @@ function unpushCyl() {
         cylRot -= cylRotSpeed;
         cylRot = Math.max(cylRot, 0);
         cyl.css({
-            transform: "rotateZ(" + cylRot + "deg)"
-        })
+            transform: "rotateZ(" + cylRot + "deg)",
+        });
         driver.css({
-            transform: "rotateZ(" + cylRot + "deg)"
-        })
+            transform: "rotateZ(" + cylRot + "deg)",
+        });
         if (cylRot <= 0) {
             cylRot = 0;
             clearInterval(cylRotationInterval);
@@ -304,14 +285,14 @@ function damagePin() {
     if (!pinLastDamaged || Date.now() - pinLastDamaged > pinDamageInterval) {
         var tl = new TimelineLite();
         pinHealth -= pinDamage;
-        pinLastDamaged = Date.now()
+        pinLastDamaged = Date.now();
 
         //pin damage/lock jiggle animation
-        tl.to(pin, (pinDamageInterval / 4) / 1000, {
-            rotationZ: pinRot - 2
+        tl.to(pin, pinDamageInterval / 4 / 1000, {
+            rotationZ: pinRot - 2,
         });
-        tl.to(pin, (pinDamageInterval / 4) / 1000, {
-            rotationZ: pinRot
+        tl.to(pin, pinDamageInterval / 4 / 1000, {
+            rotationZ: pinRot,
         });
         if (pinHealth <= 0) {
             breakPin();
@@ -324,30 +305,35 @@ function breakPin() {
     gamePaused = true;
     clearInterval(cylRotationInterval);
     numPins--;
-    $('span').text(numPins)
-    pinTop = pin.find('.top');
-    pinBott = pin.find('.bott');
+    $("span").text(numPins);
+    pinTop = pin.find(".top");
+    pinBott = pin.find(".bott");
     tl = new TimelineLite();
     tl.to(pinTop, 0.7, {
         rotationZ: -400,
         x: -200,
         y: -100,
-        opacity: 0
-    });
-    tl.to(pinBott, 0.7, {
-        rotationZ: 400,
-        x: 200,
-        y: 100,
         opacity: 0,
-        onComplete: function () {
-            if (numPins > 0) {
-                gamePaused = false;
-                reset();
-            } else {
-                outOfPins();
-            }
-        }
-    }, 0)
+    });
+    tl.to(
+        pinBott,
+        0.7,
+        {
+            rotationZ: 400,
+            x: 200,
+            y: 100,
+            opacity: 0,
+            onComplete: function () {
+                if (numPins > 0) {
+                    gamePaused = false;
+                    reset();
+                } else {
+                    outOfPins();
+                }
+            },
+        },
+        0
+    );
     tl.play();
 }
 
@@ -356,52 +342,52 @@ function reset() {
     pinHealth = 100;
     pinRot = 0;
     pin.css({
-        transform: "rotateZ(" + pinRot + "deg)"
-    })
-    cyl.css({
-        transform: "rotateZ(" + cylRot + "deg)"
-    })
-    driver.css({
-        transform: "rotateZ(" + cylRot + "deg)"
-    })
-    TweenLite.to(pin.find('.top'), 0, {
-        rotationZ: 0,
-        x: 0,
-        y: 0,
-        opacity: 1
+        transform: "rotateZ(" + pinRot + "deg)",
     });
-    TweenLite.to(pin.find('.bott'), 0, {
+    cyl.css({
+        transform: "rotateZ(" + cylRot + "deg)",
+    });
+    driver.css({
+        transform: "rotateZ(" + cylRot + "deg)",
+    });
+    TweenLite.to(pin.find(".top"), 0, {
         rotationZ: 0,
         x: 0,
         y: 0,
-        opacity: 1
+        opacity: 1,
+    });
+    TweenLite.to(pin.find(".bott"), 0, {
+        rotationZ: 0,
+        x: 0,
+        y: 0,
+        opacity: 1,
     });
 }
 
 function outOfPins() {
     gameOver = true;
-    $.post('https://qb-storerobbery/fail');
-    setTimeout(function(){
-        reset()
-    }, 250)
+    $.post("https://qb-storerobbery/fail");
+    setTimeout(function () {
+        reset();
+    }, 250);
 }
 
 function unlock() {
     gameOver = true;
-    $.post('https://qb-storerobbery/success');
-    solveDeg = (Math.random() * 180) - 90
-    solvePadding = 4
-    maxDistFromSolve = 45
-    pinRot = 1
-    cylRot = 1
-    lastMousePos = 0
+    $.post("https://qb-storerobbery/success");
+    solveDeg = Math.random() * 180 - 90;
+    solvePadding = 4;
+    maxDistFromSolve = 45;
+    pinRot = 1;
+    cylRot = 1;
+    lastMousePos = 0;
 }
 
 //UTIL
 Util = {};
 Util.clamp = function (val, max, min) {
     return Math.min(Math.max(val, min), max);
-}
+};
 Util.convertRanges = function (OldValue, OldMin, OldMax, NewMin, NewMax) {
-    return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-}
+    return ((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin) + NewMin;
+};
