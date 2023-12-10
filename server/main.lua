@@ -57,9 +57,13 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
                     label = Lang:t('text.safe_code') .. tostring(code)
                 }
             else
-                info = {
-                    label = Lang:t('text.safe_code') .. tostring(math.floor((code[1] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[2] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[3] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[4] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[5] % 360) / 3.60))
-                }
+                local label = Lang:t('text.safe_code') .. ' '
+
+                for i = 1, #code do
+                    label = label .. tostring(math.floor((code[i] % 360) / 3.60)) .. ' - '
+                end
+
+                info = {label = label:sub(1, -3)}
             end
             Player.Functions.AddItem('stickynote', 1, false, info)
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['stickynote'], 'add')
