@@ -50,7 +50,7 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
         }
         Player.Functions.AddItem('markedbills', bags, false, info)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], 'add')
-        if math.random(1, 100) <= 10 then
+        if math.random(1, 100) <= Config.stickyNoteChance then
             local code = SafeCodes[Config.Registers[register].safeKey]
             if Config.Safes[Config.Registers[register].safeKey].type == 'keypad' then
                 info = {
