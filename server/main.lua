@@ -50,16 +50,20 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
         }
         Player.Functions.AddItem('markedbills', bags, false, info)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], 'add')
-        if math.random(1, 100) <= 10 then
+        if math.random(1, 100) <= Config.stickyNoteChance then
             local code = SafeCodes[Config.Registers[register].safeKey]
             if Config.Safes[Config.Registers[register].safeKey].type == 'keypad' then
                 info = {
                     label = Lang:t('text.safe_code') .. tostring(code)
                 }
             else
-                info = {
-                    label = Lang:t('text.safe_code') .. tostring(math.floor((code[1] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[2] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[3] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[4] % 360) / 3.60)) .. '-' .. tostring(math.floor((code[5] % 360) / 3.60))
-                }
+                local label = Lang:t('text.safe_code') .. ' '
+
+                for i = 1, #code do
+                    label = label .. tostring(math.floor((code[i] % 360) / 3.60)) .. ' - '
+                end
+
+                info = {label = label:sub(1, -3)}
             end
             Player.Functions.AddItem('stickynote', 1, false, info)
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['stickynote'], 'add')
