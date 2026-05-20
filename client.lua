@@ -1,4 +1,5 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qb-core']:GetCoreObject({ 'Functions' })
+local sharedItems = exports['qb-core']:GetShared('Items')
 local currentRegister = 0
 local currentSafe = 0
 local copsCalled = false
@@ -117,9 +118,16 @@ RegisterNetEvent('QBCore:Client:SetDuty', function(duty)
     onDuty = duty
 end)
 
-RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
-    PlayerJob = JobInfo
-    onDuty = true
+RegisterNetEvent('QBCore:Client:OnPlayerUpdated', function(key, val)
+    if key == 'job' then
+        local JobInfo = val
+        PlayerJob = JobInfo
+        onDuty = true
+    elseif key == 'all' then
+        local JobInfo = val.job
+        PlayerJob = JobInfo
+        onDuty = true
+    end
 end)
 
 RegisterNetEvent('police:SetCopCount', function(amount)
@@ -351,12 +359,12 @@ RegisterNUICallback('fail', function(_, cb)
     if usingAdvanced then
         if math.random(1, 100) < 20 then
             TriggerServerEvent('qb-storerobbery:server:removeAdvancedLockpick')
-            TriggerEvent('qb-inventory:client:ItemBox', QBCore.Shared.Items['advancedlockpick'], 'remove')
+            TriggerEvent('qb-inventory:client:ItemBox', sharedItems['advancedlockpick'], 'remove')
         end
     else
         if math.random(1, 100) < 40 then
             TriggerServerEvent('qb-storerobbery:server:removeLockpick')
-            TriggerEvent('qb-inventory:client:ItemBox', QBCore.Shared.Items['lockpick'], 'remove')
+            TriggerEvent('qb-inventory:client:ItemBox', sharedItems['lockpick'], 'remove')
         end
     end
     if (not QBCore.Functions.IsWearingGloves() and math.random(1, 100) <= 25) then

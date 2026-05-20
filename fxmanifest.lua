@@ -3,7 +3,7 @@ game 'gta5'
 lua54 'yes'
 author 'Kakarot'
 description 'Allows players to rob various stores on the map for money and items'
-version '1.2.0'
+version '1.5.0'
 
 ui_page 'html/index.html'
 
@@ -14,8 +14,8 @@ shared_scripts {
     'locales/*.lua'
 }
 
-client_script 'client/main.lua'
-server_script 'server/main.lua'
+client_script 'client.lua'
+server_script 'server.lua'
 
 files {
     'html/index.html',
